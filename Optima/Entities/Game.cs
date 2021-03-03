@@ -1,4 +1,4 @@
-namespace Optima.Domain.Entities
+namespace Optima.Entities
 {
     public class Game
     {
