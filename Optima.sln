@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "domain", "domain\domain.csproj", "{E469A533-B823-4439-8BAD-046AED0FBA99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optima", "Optima\Optima.csproj", "{E469A533-B823-4439-8BAD-046AED0FBA99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{70449FB1-BCB1-4C21-AD7B-403FA8C5E271}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\UnitTests.csproj", "{70449FB1-BCB1-4C21-AD7B-403FA8C5E271}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
