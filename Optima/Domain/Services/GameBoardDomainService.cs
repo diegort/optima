@@ -1,6 +1,7 @@
 ﻿namespace Optima.Domain.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Optima.Entities;
 
     public class GameBoardDomainService : IGameBoardDomainService
@@ -10,7 +11,25 @@
 
         public int StartGame(string homeTeam, string awayTeam)
         {
-            throw new System.NotImplementedException();
+            var home = new TeamData {
+                Name = homeTeam,
+                Score = 0
+            };
+
+            var away = new TeamData {
+                Name = awayTeam,
+                Score = 0
+            };
+
+            var game = new Game {
+                HomeTeam = home,
+                AwayTeam = away,
+                Id = ActiveGames.Count > 0 ? ActiveGames.Max(g => g.Id) + 1 : 1
+            };
+
+            ActiveGames.Add(game);
+
+            return game.Id;
         }
 
         public bool FinishGame(int gameId)
