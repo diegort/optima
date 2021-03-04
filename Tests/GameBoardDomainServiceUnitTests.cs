@@ -1,3 +1,5 @@
+using Optima.Helpers;
+
 namespace Optima
 {
     using System;
@@ -22,7 +24,7 @@ namespace Optima
             var awayTeam = "Team 2";
 
             // Act
-            var game_id = service.StartGame(homeTeam, awayTeam);
+            service.StartGame(homeTeam, awayTeam);
 
             // Assert
             Assert.Single(service.ActiveGames);
@@ -32,21 +34,7 @@ namespace Optima
         public void FinishGame_ValidGameId_GameIsRemoved()
         {
             // Arrange
-            var homeTeam = new TeamData {
-                Name = "Team1",
-                Score = 4
-            };
-            var awayTeam = new TeamData {
-                Name = "Team2",
-                Score = 3
-            };
-
-            var game = new Game
-            {
-                HomeTeam = homeTeam,
-                AwayTeam = awayTeam,
-                Id = 1
-            };
+            var game = GameBuilder.Build("Team1", 4, "Team2", 3, 1);
 
             service.ActiveGames.Add(game);
 
@@ -62,21 +50,7 @@ namespace Optima
         public void FinishGame_WrongGameId_GameIsRemoved()
         {
             // Arrange
-            var homeTeam = new TeamData {
-                Name = "Team1",
-                Score = 4
-            };
-            var awayTeam = new TeamData {
-                Name = "Team2",
-                Score = 3
-            };
-
-            var game = new Game
-            {
-                HomeTeam = homeTeam,
-                AwayTeam = awayTeam,
-                Id = 1
-            };
+            var game = GameBuilder.Build("Team1", 4, "Team2", 3, 1);
 
             service.ActiveGames.Add(game);
 
@@ -95,22 +69,7 @@ namespace Optima
             var homeScore = 0;
             var awayScore = 0;
             var newAwayScore = 1;
-            var homeTeam = new TeamData {
-                Name = "Team1",
-                Score = homeScore
-            };
-
-            var awayTeam = new TeamData {
-                Name = "Team2",
-                Score = awayScore
-            };
-
-            var game = new Game
-            {
-                HomeTeam = homeTeam,
-                AwayTeam = awayTeam,
-                Id = 1
-            };
+            var game = GameBuilder.Build("Team1", homeScore, "Team2", awayScore, 1);
 
             service.ActiveGames.Add(game);
 
@@ -126,42 +85,10 @@ namespace Optima
         public void GetSummary_SomeGamesInProgress_ReturnedInProperOrder()
         {
             // Arrange
-            var homeTeam1 = new TeamData {
-                Name = "HT1",
-                Score = 3
-            };
-
-            var awayTeam1 = new TeamData {
-                Name = "AT1",
-                Score = 4
-            };
-
-            var game1 = new Game
-            {
-                HomeTeam = homeTeam1,
-                AwayTeam = awayTeam1,
-                Id = 1
-            };
-
+            var game1 = GameBuilder.Build("HT1", 3, "AT1", 4, 1);
             service.ActiveGames.Add(game1);
 
-            var homeTeam2 = new TeamData {
-                Name = "HT2",
-                Score = 5
-            };
-
-            var awayTeam2 = new TeamData {
-                Name = "AT2",
-                Score = 5
-            };
-
-            var game2 = new Game
-            {
-                HomeTeam = homeTeam2,
-                AwayTeam = awayTeam2,
-                Id = 2
-            };
-
+            var game2 = GameBuilder.Build("HT2", 5, "AT2", 5, 2);
             service.ActiveGames.Add(game2);
 
             // Act
