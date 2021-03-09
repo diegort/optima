@@ -85,18 +85,30 @@ namespace Optima
         public void GetSummary_SomeGamesInProgress_ReturnedInProperOrder()
         {
             // Arrange
-            var game1 = GameBuilder.Build("HT1", 3, "AT1", 4, 1);
+            var game1 = GameBuilder.Build("Mexico", 0, "Canada", 5, 1);
             service.ActiveGames.Add(game1);
 
-            var game2 = GameBuilder.Build("HT2", 5, "AT2", 5, 2);
+            var game2 = GameBuilder.Build("Spain", 10, "Brazil", 2, 2);
             service.ActiveGames.Add(game2);
+
+            var game3 = GameBuilder.Build("Germany", 2, "France", 2, 3);
+            service.ActiveGames.Add(game3);
+
+            var game4 = GameBuilder.Build("Uruguay", 6, "Italy", 6, 4);
+            service.ActiveGames.Add(game4);
+
+            var game5 = GameBuilder.Build("Argentina", 3, "Australia", 1, 5);
+            service.ActiveGames.Add(game5);
 
             // Act
             var games = service.GetSummary().ToList();
 
             // Assert
-            Assert.Equal(game2.Id, games[0].Id);
-            Assert.Equal(game1.Id, games[1].Id);
+            Assert.Equal(game4.Id, games[0].Id);
+            Assert.Equal(game2.Id, games[1].Id);
+            Assert.Equal(game1.Id, games[2].Id);
+            Assert.Equal(game5.Id, games[3].Id);
+            Assert.Equal(game3.Id, games[4].Id);
         }
     }
 }
