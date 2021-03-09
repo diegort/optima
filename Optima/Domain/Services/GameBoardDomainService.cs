@@ -34,19 +34,31 @@
 
         public bool FinishGame(int gameId)
         {
-            var toFinish = ActiveGames.FirstOrDefault(g => g.Id == gameId);
+            var toFinish = FindGame(gameId);
             
             return toFinish != null && ActiveGames.Remove(toFinish);
         }
 
         public void UpdateScore(int gameId, int homeTeamScore, int awayTeamScore)
         {
-            throw new System.NotImplementedException();
+            var game = FindGame(gameId);
+
+            if (game == null)
+            {
+                return;
+            }
+            game.HomeTeam.Score = homeTeamScore;
+            game.AwayTeam.Score = awayTeamScore;
         }
 
         public IEnumerable<Game> GetSummary()
         {
             throw new System.NotImplementedException();
+        }
+
+        private Game FindGame(int gameId)
+        {
+            return ActiveGames.FirstOrDefault(g => g.Id == gameId);
         }
     }
 }
