@@ -53,7 +53,9 @@
 
         public IEnumerable<Game> GetSummary()
         {
-            throw new System.NotImplementedException();
+            return ActiveGames
+                    .OrderByDescending(g => g.HomeTeam.Score + g.AwayTeam.Score)
+                    .ThenByDescending(g => g.Id);
         }
 
         private Game FindGame(int gameId)
