@@ -1,5 +1,6 @@
 ﻿namespace Optima.Domain.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Optima.Entities;
@@ -41,6 +42,9 @@
 
         public void UpdateScore(int gameId, int homeTeamScore, int awayTeamScore)
         {
+            ValidateScore(homeTeamScore, nameof(homeTeamScore));
+            ValidateScore(awayTeamScore, nameof(awayTeamScore));
+
             var game = FindGame(gameId);
 
             if (game == null)
@@ -61,6 +65,14 @@
         private Game FindGame(int gameId)
         {
             return ActiveGames.FirstOrDefault(g => g.Id == gameId);
+        }
+
+        private static void ValidateScore(int score, string message)
+        {
+            if (score < 0)
+            {
+                throw new ArgumentOutOfRangeException(message);
+            }
         }
     }
 }
