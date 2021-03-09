@@ -34,7 +34,9 @@
 
         public bool FinishGame(int gameId)
         {
-            throw new System.NotImplementedException();
+            var toFinish = ActiveGames.FirstOrDefault(g => g.Id == gameId);
+            
+            return toFinish != null && ActiveGames.Remove(toFinish);
         }
 
         public void UpdateScore(int gameId, int homeTeamScore, int awayTeamScore)
