@@ -1,12 +1,10 @@
-using Optima.Helpers;
-
-namespace Optima
+namespace UnitTests
 {
     using System;
     using System.Linq;
-    using Xunit;
     using Optima.Domain.Services;
-    using Optima.Entities;
+    using Optima.Helpers;
+    using Xunit;
 
     public class GameBoardDomainServiceUnitTests
     {
@@ -30,6 +28,19 @@ namespace Optima
             Assert.Single(service.ActiveGames);
         }
 
+        [Theory]
+        [InlineData(null, "Team2")]
+        [InlineData("Team1", null)]
+        public void StartGame_OneTeamNameMissing_ExceptionIsThrown(string homeTeam, string awayTeam)
+        {
+            // Act
+            var exception = Record.Exception(() => service.StartGame(homeTeam, awayTeam));
+
+            // Assert
+            Assert.IsType<ArgumentNullException>(exception);
+        }
+
+
         [Fact]
         public void FinishGame_ValidGameId_GameIsRemoved()
         {
@@ -47,7 +58,7 @@ namespace Optima
         }
 
         [Fact]
-        public void FinishGame_WrongGameId_GameIsRemoved()
+        public void FinishGame_WrongGameId_GameIsNotRemoved()
         {
             // Arrange
             var game = GameBuilder.Build("Team1", 4, "Team2", 3, 1);
@@ -82,6 +93,44 @@ namespace Optima
         }
 
         [Fact]
+        public void UpdateGame_WrongNameIdValidScore_ScoreDoesNotGetUpdated()
+        {
+            // Arrange
+            var homeScore = 0;
+            var awayScore = 0;
+            var newAwayScore = 1;
+            var game = GameBuilder.Build("Team1", homeScore, "Team2", awayScore, 1);
+
+            service.ActiveGames.Add(game);
+
+            // Act
+            service.UpdateScore(game.Id + 1, game.HomeTeam.Score, newAwayScore);
+
+            // Assert
+            Assert.Equal(homeScore, service.ActiveGames[0].HomeTeam.Score);
+            Assert.NotEqual(newAwayScore, service.ActiveGames[0].AwayTeam.Score);
+        }
+
+        [Theory]
+        [InlineData(0, -1)]
+        [InlineData(-1, 0)]
+        public void UpdateGame_NegativeScore_ExceptionIsThrown(int newHomeScore, int newAwayScore)
+        {
+            // Arrange
+            var homeScore = 0;
+            var awayScore = 0;
+            var game = GameBuilder.Build("Team1", homeScore, "Team2", awayScore, 1);
+
+            service.ActiveGames.Add(game);
+
+            // Act
+            var exception = Record.Exception(() => service.UpdateScore(game.Id + 1, newHomeScore, newAwayScore));
+
+            // Assert
+            Assert.IsType<ArgumentOutOfRangeException>(exception);
+        }
+
+        [Fact]
         public void GetSummary_SomeGamesInProgress_ReturnedInProperOrder()
         {
             // Arrange
@@ -109,6 +158,16 @@ namespace Optima
             Assert.Equal(game1.Id, games[2].Id);
             Assert.Equal(game5.Id, games[3].Id);
             Assert.Equal(game3.Id, games[4].Id);
+        }
+
+        [Fact]
+        public void GetSummary_ThereAreNoRunningGames_ReturnsNoGames()
+        {
+            // Act
+            var games = service.GetSummary().ToList();
+
+            // Assert
+            Assert.Empty(games);
         }
     }
 }
