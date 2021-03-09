@@ -12,17 +12,23 @@
 
         public int StartGame(string homeTeam, string awayTeam)
         {
-            var home = new TeamData {
+            ValidateTeamName(homeTeam, nameof(homeTeam));
+            ValidateTeamName(awayTeam, nameof(awayTeam));
+
+            var home = new TeamData
+            {
                 Name = homeTeam,
                 Score = 0
             };
 
-            var away = new TeamData {
+            var away = new TeamData
+            {
                 Name = awayTeam,
                 Score = 0
             };
 
-            var game = new Game {
+            var game = new Game
+            {
                 HomeTeam = home,
                 AwayTeam = away,
                 Id = ActiveGames.Count > 0 ? ActiveGames.Max(g => g.Id) + 1 : 1
@@ -36,7 +42,7 @@
         public bool FinishGame(int gameId)
         {
             var toFinish = FindGame(gameId);
-            
+
             return toFinish != null && ActiveGames.Remove(toFinish);
         }
 
@@ -66,6 +72,15 @@
         {
             return ActiveGames.FirstOrDefault(g => g.Id == gameId);
         }
+
+        private static void ValidateTeamName(string name, string message)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException(message);
+            }
+        }
+
 
         private static void ValidateScore(int score, string message)
         {
